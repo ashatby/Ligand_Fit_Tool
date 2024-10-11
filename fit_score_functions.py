@@ -66,7 +66,7 @@ def find_fit_data_pandas(proteinfile, ligandfile):
     all_ligands = (pdbqt_splicer.readpdbqt(ligandfile))
     for i in range(len(all_ligands)):
         ligand = all_ligands[i]
-        find_ligand_fit_pandas(list_of_protein_coords,ligand,i, alldata)
+        find_ligand_fit_pandas(list_of_protein_coords,ligand,i, alldata,pdb_name=ligand.name)
         # print("Processing Ligand",i)
         # print(alldata)
     return alldata
@@ -79,7 +79,7 @@ def find_fit_data_pandas(proteinfile, ligandfile):
 def find_ligand_fit_pandas(list_of_protein_coords, ligand,itr, alldata, pdb_name = ''):
     data = []
 
-    ligand_atom_coords = list(x.co for x in ligand)
+    ligand_atom_coords = list(x.co for x in ligand.atoms)
 
 
     ribf_kdtree = KDTree.KDTree(list_of_protein_coords)
