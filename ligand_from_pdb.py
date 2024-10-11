@@ -17,15 +17,6 @@ def read_pdb_ligand(filename,hetatm_name,hetatm_chain_name = '',hetatms=False,hy
   file.close()
   protein = parse_pdb(lines,hetatms)
 
-#   for chain in protein:
-#     for atom in chain.atoms:
-#       if atom.is_hetatm:
-#         print(atom.chn)
-
-
-#   hetatms = [chain for chain in protein if all(atom.is_hetatm for atom in chain.atoms)]
-#   ligand = [atom for chain in hetatms for atom in chain.atoms if atom.rnam == hetatm_name]
-
   hetatms = [atom for chain in protein for atom in chain.atoms if atom.is_hetatm]
   if (hetatm_chain_name):
     ligand = [atom for atom in hetatms if ((atom.rnam == hetatm_name) and (atom.chn == hetatm_chain_name))]
@@ -92,72 +83,6 @@ class atom_rec:
   def copy(self): return atom_rec(self.toString())
 
 
-# # test = sys.argv[1] # "4HHB.pdb"
-# test = "RCSB_PDBs/4ph9.pdb"
-# pdb = read_pdb(test)
-# first_atom_chain = pdb[0]
-# first_atom = first_atom_chain[0]
-# next_atom = first_atom_chain[2]
-# other_atoms = first_atom_chain[5:1:-1]
-# # print ("num_chains("+test+")="+str((pdb)[0][0].line))
-# print(f'''
-#   self.line = {first_atom.line}
-#   self.anum = {first_atom.anum}
-#   self.anam = {first_atom.anam}
-#   self.rnam = {first_atom.rnam}
-#   self.chn = {first_atom.chn}
-#   self.rnum = {first_atom.rnum}
-#   self.x = {first_atom.x}
-#   self.y = {first_atom.y}
-#   self.z = {first_atom.z}
-#   self.co = {first_atom.co}
-#   self.occ = {first_atom.occ}
-#   self.bf = {first_atom.bf}   
 
-# -------
-
-#   self.line = {next_atom.line}
-#   self.anum = {next_atom.anum}
-#   self.anam = {next_atom.anam}
-#   self.rnam = {next_atom.rnam}
-#   self.chn = {next_atom.chn}
-#   self.rnum = {next_atom.rnum}
-#   self.x = {next_atom.x}
-#   self.y = {next_atom.y}
-#   self.z = {next_atom.z}
-#   self.co = {next_atom.co}
-#   self.occ = {next_atom.occ}
-#   self.bf = {next_atom.bf} 
-
-# -------
-
-# THE TWO COORDS ARE: {first_atom.co} and {next_atom.co}
-#       ''')
-
-
-# print(f"COORDS FOR ORIGINAL ATOM: {first_atom.co}")
-
-# other_atom_coords = []
-# for i in range (len(other_atoms)):
-#   atom = other_atoms[i]
-#   print(f"COORDS FOR ATOM {i}: {atom.co}")
-#   other_atom_coords.append(atom.co)
-
-
-# # example of how to use this:
-# #  kdtree = KDTree([x.co for x in receptor])
-# #  (dsq,coord) = kdtree.nearest(prot[j].co)
-# #  j = kdtree.index_of(coord)
-
-
-# list_of_atoms = [first_atom.co, next_atom.co]
-# print(list_of_atoms)
-# print(other_atom_coords)
-
-# kdtree = KDTree.KDTree(other_atom_coords)
-# (dsq,coord) = kdtree.nearest(first_atom.co)
-# j = kdtree.index_of(coord)
-# d = math.sqrt(dsq)
-# print(j,d)
 
 

@@ -1,5 +1,21 @@
 import re
 
+class ligand_molec:
+  def __init__(self,lines):
+    self.atoms = []
+    self.name = ''
+    for line in lines:
+            # Look for the line that starts with 'REMARK file:'
+            if line.startswith("REMARK file:"):
+                # Extract the name part (after "REMARK file:") and strip any trailing spaces/newlines
+                name_with_extension = line.split("REMARK file:")[1].strip()
+                # Remove the '.pdbqt' extension
+                if name_with_extension.endswith(".pdbqt"):
+                    self.name = name_with_extension[:-6]  # Remove last 6 characters (".pdbqt")
+                break
+
+
+
 class ligand_atom:
   def __init__(self,line):
     atom_attributes = ((lambda x: [i.strip() for i in x.split()])(line))
@@ -38,6 +54,8 @@ def parse_pdbqt(lines): #return a 2d array of ligands, atoms in ligand
     # print("--------------")
     # print(molecules[1])
 
+    
+
 
     for molecule in molecules:
         for line in molecule.splitlines():
@@ -49,24 +67,10 @@ def parse_pdbqt(lines): #return a 2d array of ligands, atoms in ligand
         # print("appended ligands is")
         # print(atoms)
         atoms = []
-    # print("ligands")
-
-    # print(ligands[0][0].co)
-    # print(ligands[1][0].co)
 
     return ligands
 
-    # for line in lines:
-    #     if line.find("ATOM")==0:
-    #         if line[13]!='H' or hydrogens==True:
-    #             if line[16]==' ' or line[16]=='A': # only first atom if multiple altLoc
-    #                 atoms.append(atom_rec(line))
-    #     if line.find("HETATM")==0 and hetatms==True: atoms.append(atom_rec(line))
-    #     if line.find("TER")==0 or line.find("ENDMDL")==0: 
-    #             chains.append(atoms)
-    #             atoms = []
-    # if len(atoms)>0: chains.append(atoms)
-    # return chains #a 2d array of atoms
+
 
 def extract_atom_attributes_from_line(line):
     if line.startswith("ATOM"):
@@ -88,38 +92,7 @@ def splice_into_molecules_from_textlines(text): #returns list of raw lines from 
     substrings = pattern.findall(stringtext)
     return substrings
 
-# start_word = "MODEL"
-# end_word = "ENDMDL"
 
-# # Regular expression to find the content between start_word and end_word
-# pattern = re.compile(f'{re.escape(start_word)}(.*?){re.escape(end_word)}', re.DOTALL)
-# substrings = pattern.findall(text)
-
-# substrings = get_pdbqt_molecules_from_file("RCSB_PDBs/RibF_vina_top100.pdbqt")
-
-# print((substrings))
-# print(len(substrings))
-
-# for i in range(len(substrings)):
-#     substring = substrings[i]
-#     print(f'''
-# MOLECULE: {i+1}
-#        {substring}             
-# END OF MOLECULE: {i+1}
-
-# ''')
-    
-# substring = substrings[0]
-# for line in substring.splitlines():
-#     if line.startswith("ATOM"):
-#         print(line)
-#     print("DOESNT HAVE ATOM")
-
-
-
-
-# readpdbqt("RCSB_PDBs/RibF_SACC_hits103.pdbqt")
-# readpdbqt("RCSB_PDBs/RibF_vina_top100.pdbqt")
 
     
 
