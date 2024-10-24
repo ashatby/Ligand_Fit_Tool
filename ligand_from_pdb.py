@@ -24,8 +24,8 @@ def read_pdb_ligand(filename,hetatm_name,hetatm_chain_name = '',hetatms=False,hy
     ligand = [atom for atom in hetatms if atom.rnam == hetatm_name]
     # print(f"ligand het chain is '{ligand[0].chn}' for filename {filename}")
 
-    
-  return ligand
+  ret_ligand = pdbqt_splicer.ligand_molec(ligand,hetatm_name)
+  return ret_ligand
 
  
 

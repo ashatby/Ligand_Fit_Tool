@@ -1,13 +1,10 @@
 import re
 
 class ligand_molec:
-  def __init__(self, inputatoms, nameline):
+  def __init__(self, inputatoms, name):
     self.atoms = inputatoms
-    self.name = ''
-    name_with_extension = nameline.split("REMARK file:")[1].strip()
-    # Remove the '.pdbqt' extension
-    if name_with_extension.endswith(".pdbqt"):
-        self.name = name_with_extension[:-6]  # Remove last 6 characters (".pdbqt")
+    self.name = name
+    # Remove last 6 characters (".pdbqt")
 
 
 
@@ -55,7 +52,12 @@ def parse_pdbqt(lines): #return a 2d array of ligands, atoms in ligand
                 newatom = extract_atom_attributes_from_line(line)
                 # print("appended newatom")
                 atoms.append(newatom)
-        lig_molec = ligand_molec(atoms,nameline)
+
+        name_with_extension = nameline.split("REMARK file:")[1].strip()
+        # Remove the '.pdbqt' extension
+        if name_with_extension.endswith(".pdbqt"):
+            name = name_with_extension[:-6]
+        lig_molec = ligand_molec(atoms,name)
         ligands.append(lig_molec)
 
         atoms = []
