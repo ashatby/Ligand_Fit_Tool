@@ -105,7 +105,9 @@ def find_ligand_fit_pandas(list_of_protein_coords, ligand,itr, alldata, pdb_name
 
     if (not pdb_name):
         pdb_name = "Ligand "+ str(itr+1)
-    data = [pdb_name, fit_scores.mean(), fit_scores.median(), fit_scores.max(), fit_scores.min(), fit_scores.quantile(0.25), fit_scores.quantile(0.75) ]
+
+    flag = (fit_scores.mean() > 3.8) or (fit_scores.max() > 5)
+    data = [pdb_name, fit_scores.mean(), fit_scores.median(), fit_scores.max(), fit_scores.min(), fit_scores.quantile(0.25), fit_scores.quantile(0.75), flag]
     alldata.append(data)
 
     return data
@@ -137,10 +139,17 @@ def get_ligand_data_pdb(proteinfile, ligandcode,hetatom_chain='',pdbname = '',pr
     return ret
 
 def dataframe(datalist):
-    cols = ["Name","Mean","Median","Maximum","Minimum","Q1","Q3"]
+    cols = ["Name","Mean","Median","Maximum","Minimum","Q1","Q3","High Distance Flag"]
     return pd.DataFrame(datalist,columns=cols)
 
+def get_flagged_values(data):
+    # Returns only the ligands with flagged (mean > 3.8 or max > 5) values. Supports either DataFrames or List input
 
+    if (isinstance(data, pd.core.frame.DataFrame)):
+        return data[data["High Distance Flag"] == True]
+    
+    elif (isinstance(data, list)):
+        return [item for item in data if item[-1] == True]
 
 
 

@@ -1,4 +1,5 @@
 import fit_score_functions
+import pandas as pd
 
 
 
@@ -30,10 +31,12 @@ ligand_data.append(fit_score_functions.get_ligand_data_pdb(r"RCSB_PDBs\3ny8.pdb"
 # Example of processing chain A of JIN hetatm in 2hzi.pdb
 ligand_data.append(fit_score_functions.get_ligand_data_pdb(r"RCSB_PDBs\2hzi.pdb","JIN",hetatom_chain="A"))
 
+
 # Turns 2D array of Ligand data into Pandas DataFrame 
 ligand_data = fit_score_functions.dataframe(ligand_data)
 
-print(ligand_data)
+# Returns only the ligands with flagged (mean > 3.8 or max > 5) values. Supports either DataFrames or List input
+print(fit_score_functions.get_flagged_values(ligand_data))
 
 
 
