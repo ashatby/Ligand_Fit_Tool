@@ -44,7 +44,8 @@ def parse_pdbqt(lines): #return a 2d array of ligands, atoms in ligand
 
     for molecule in molecules:
         for line in molecule.splitlines():
-            if line.startswith("REMARK file"):
+            #if line.startswith("REMARK file"):
+            if line.startswith("REMARK  Name"):
                nameline = line
                
 
@@ -53,10 +54,11 @@ def parse_pdbqt(lines): #return a 2d array of ligands, atoms in ligand
                 # print("appended newatom")
                 atoms.append(newatom)
 
-        name_with_extension = nameline.split("REMARK file:")[1].strip()
+        name_with_extension = nameline.strip().split()[-1]
         # Remove the '.pdbqt' extension
         if name_with_extension.endswith(".pdbqt"):
             name = name_with_extension[:-6]
+        else: name = name_with_extension
         lig_molec = ligand_molec(atoms,name)
         ligands.append(lig_molec)
 
