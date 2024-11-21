@@ -4,7 +4,7 @@ import pdbqt_splicer
 import pdb_1
 import math
 import pandas as pd
-
+import sys
 
 maxs = []
 avgs = []
@@ -77,8 +77,10 @@ def get_ligand_data_pdbqt(proteinfile, ligandfile, printprocess = False):
     all_ligands = (pdbqt_splicer.readpdbqt(ligandfile))
     for i in range(len(all_ligands)):
         ligand = all_ligands[i]
-        find_ligand_fit_pandas(list_of_protein_coords,ligand,i, alldata,list_of_protein_atoms, pdb_name=ligand.name)
+        find_ligand_fit_pandas(list_of_protein_coords,ligand,i, alldata,pdb_name=ligand.name)
         if (printprocess):
+            #print("Processing Ligand",ligand.name)
+            sys.stderr.write("Processing Ligand %s\n" % (ligand.name))
             print("Processing Ligand",ligand.name)
     return alldata
 
@@ -158,6 +160,8 @@ def get_ligand_data_pdb(proteinfile, ligandcode,hetatom_chain='',pdbname = '',pr
     if (not pdbname):
         pdbname = proteinfile[-8:-4]
     if printprocess:
+        #print(f"Processing {proteinfile}")
+        sys.stderr.write(f"Processing {proteinfile}\n")
         print(f"Processing {proteinfile}")
     ligand = ligand_from_pdb.read_pdb_ligand(proteinfile,ligandcode,hetatm_chain_name=hetatom_chain,hetatms=True)
     protein = pdb_1.read_pdb(proteinfile)

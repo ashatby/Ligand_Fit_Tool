@@ -1,18 +1,10 @@
 import re
 
 class ligand_molec:
-  def __init__(self,lines):
-    self.atoms = []
-    self.name = ''
-    for line in lines:
-            # Look for the line that starts with 'REMARK file:'
-            if line.startswith("REMARK file:"):
-                # Extract the name part (after "REMARK file:") and strip any trailing spaces/newlines
-                name_with_extension = line.split("REMARK file:")[1].strip()
-                # Remove the '.pdbqt' extension
-                if name_with_extension.endswith(".pdbqt"):
-                    self.name = name_with_extension[:-6]  # Remove last 6 characters (".pdbqt")
-                break
+  def __init__(self, inputatoms, name):
+    self.atoms = inputatoms
+    self.name = name
+    # Remove last 6 characters (".pdbqt")
 
 
 
@@ -49,23 +41,27 @@ def parse_pdbqt(lines): #return a 2d array of ligands, atoms in ligand
     atoms = []
     
     molecules = splice_into_molecules_from_textlines(lines)
-    # print(len(molecules), "is molecs")
-    # print(molecules[0])
-    # print("--------------")
-    # print(molecules[1])
-
-    
-
 
     for molecule in molecules:
         for line in molecule.splitlines():
+            #if line.startswith("REMARK file"):
+            if line.startswith("REMARK  Name"):
+               nameline = line
+               
+
             if line.startswith("ATOM"):
                 newatom = extract_atom_attributes_from_line(line)
                 # print("appended newatom")
                 atoms.append(newatom)
-        ligands.append(atoms)
-        # print("appended ligands is")
-        # print(atoms)
+
+        name_with_extension = nameline.strip().split()[-1]
+        # Remove the '.pdbqt' extension
+        if name_with_extension.endswith(".pdbqt"):
+            name = name_with_extension[:-6]
+        else: name = name_with_extension
+        lig_molec = ligand_molec(atoms,name)
+        ligands.append(lig_molec)
+
         atoms = []
 
     return ligands
