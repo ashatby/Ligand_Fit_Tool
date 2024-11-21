@@ -5,6 +5,12 @@
 Notes:
  - if the pdbqt file contains multiple ligands, it is assumed they are docked by Autodock-VINA, which uses 'REMARK  NAME' to indicate compound id's
  - hydrogen atoms on the protein and ligand are ignored
+ - For a given PDB file, ensure that the ligand in interest has all nearby protein residues present
+   - For example, in PDB 3L5D, when looking at ligand BDV, chain B was used exclusively
+   - This was because chain A of the protein (next to chain A of the BDV Ligand) was missing residues 131-136
+   - The true closest protein atom was found on TYR 132, which was missing from chain A
+   - This created an incorrect, artificially high distance score for this atom, and subsequently the entire ligand
+   - This was avoided by looking exclusively analyzing chain B, which had all protein residues properly crystalized
 
 Here is the usage:
 
