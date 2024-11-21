@@ -10,7 +10,7 @@ Notes:
    - This was because chain A of the protein (next to chain A of the BDV Ligand) was missing residues 131-136
    - The true closest protein atom was found on TYR 132, which was missing from chain A
    - This created an incorrect, artificially high distance score for this atom, and subsequently the entire ligand
-   - This was avoided by looking exclusively analyzing chain B, which had all protein residues properly crystalized
+   - This was avoided by exclusively analyzing chain B, which had all protein residues properly crystalized
 
 Here is the usage:
 
