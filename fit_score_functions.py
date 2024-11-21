@@ -72,6 +72,8 @@ def get_ligand_data_pdbqt(proteinfile, ligandfile, printprocess = False):
     alldata=[]
     protein = pdb_1.read_pdb(proteinfile)
     list_of_protein_coords = list(atom.co for chain in protein for atom in chain)
+    list_of_protein_atoms = list(atom for chain in protein for atom in chain)
+
     all_ligands = (pdbqt_splicer.readpdbqt(ligandfile))
     for i in range(len(all_ligands)):
         ligand = all_ligands[i]
@@ -79,11 +81,12 @@ def get_ligand_data_pdbqt(proteinfile, ligandfile, printprocess = False):
         if (printprocess):
             #print("Processing Ligand",ligand.name)
             sys.stderr.write("Processing Ligand %s\n" % (ligand.name))
+            print("Processing Ligand",ligand.name)
     return alldata
 
 
 
-def find_ligand_fit_pandas(list_of_protein_coords, ligand,itr, alldata, pdb_name = ''):
+def find_ligand_fit_pandas(list_of_protein_coords, ligand,itr, alldata, prot_atoms, pdb_name = '', printatoms = False):
     data = []
 
     ligand_atom_coords = list(x.co for x in ligand.atoms)
@@ -94,14 +97,39 @@ def find_ligand_fit_pandas(list_of_protein_coords, ligand,itr, alldata, pdb_name
     fit_scores = pd.Series(dtype='float64')
     (dsq,coord) = ribf_kdtree.nearest(ligand_atom_coords[0])
     d = math.sqrt(dsq)
+    j = ribf_kdtree.index_of(coord)
+
+    # print(f"ATOM: {ligand.atoms[0].anam},    DISTANCE: {d},   PROTEIN: {j},     ATOM COORDS: {ligand.atoms[0].co}  |  ")
+    # print(prot_atoms[j].toString())
+    if(printatoms):
+        print("LIGAND ATOM:",end = '\n\t')
+        print(ligand.atoms[0].toString())
+        print("PROTEIN ATOM:",end = '\n\t')
+        print(prot_atoms[j].toString())
+        print("Distance:",end = '\n\t')
+        print(d)
+        print()
     fit_scores = pd.concat([fit_scores, pd.Series([d])])
 
     for i in range(1, len(ligand_atom_coords)):
+
         atomcords = ligand_atom_coords[i]
         (dsq,coord) = ribf_kdtree.nearest(atomcords)
+        j = ribf_kdtree.index_of(coord)
         d = math.sqrt(dsq)
         data.append(d)
         fit_scores = pd.concat([fit_scores, pd.Series([d])])
+        if(printatoms):
+            print("Ligand Atom:",end = '\n\t')
+            print(ligand.atoms[i].toString())
+            print("Protein Atom:",end = '\n\t')
+            print(prot_atoms[j].toString())
+            print("Distance:",end = '\n\t')
+            print(d)
+            print()
+        
+
+
 
 
     if (not pdb_name):
@@ -114,7 +142,7 @@ def find_ligand_fit_pandas(list_of_protein_coords, ligand,itr, alldata, pdb_name
     return data
 
 
-def get_ligand_data_pdb(proteinfile, ligandcode,hetatom_chain='',pdbname = '',printprocess = False): 
+def get_ligand_data_pdb(proteinfile, ligandcode,hetatom_chain='',pdbname = '',printprocess = False, printatoms = False): 
     # For PDB Files, use get_ligand_data_pdb(), parameters are:
         # proteinfile: PDB file in which the protein data is stored
         # ligandcode: HETATM Code for which ligand to process
@@ -134,10 +162,15 @@ def get_ligand_data_pdb(proteinfile, ligandcode,hetatom_chain='',pdbname = '',pr
     if printprocess:
         #print(f"Processing {proteinfile}")
         sys.stderr.write(f"Processing {proteinfile}\n")
+        print(f"Processing {proteinfile}")
     ligand = ligand_from_pdb.read_pdb_ligand(proteinfile,ligandcode,hetatm_chain_name=hetatom_chain,hetatms=True)
     protein = pdb_1.read_pdb(proteinfile)
     list_of_protein_coords = list(atom.co for chain in protein for atom in chain)
-    ret = find_ligand_fit_pandas(list_of_protein_coords,ligand,'',[],pdb_name=pdbname)
+    list_of_protein_atoms = list(atom for chain in protein for atom in chain)
+
+    # print("Length of protein chains", len(list_of_protein_coords))
+
+    ret = find_ligand_fit_pandas(list_of_protein_coords,ligand,'',[],prot_atoms=list_of_protein_atoms, pdb_name=pdbname, printatoms=printatoms)
     return ret
 
 def dataframe(datalist):
