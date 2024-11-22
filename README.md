@@ -8,7 +8,7 @@ Notes:
  - For a given PDB file, ensure that the ligand in interest has all nearby protein residues present
    - For example, in PDB 3L5D, when looking at ligand BDV, chain B was used exclusively
    - This was because chain A of the protein (next to chain A of the BDV Ligand) was missing residues 131-136
-   - The true closest protein atom was found on TYR 132, which was missing from chain A
+   - The true closest protein atom for one of the ligand atoms was found on TYR 132, which was missing from chain A
    - This created an incorrect, artificially high distance score for this atom, and subsequently the entire ligand
    - This was avoided by exclusively analyzing chain B, which had all protein residues properly crystalized
 
