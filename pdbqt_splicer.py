@@ -10,6 +10,7 @@ class ligand_molec:
 
 class ligand_atom:
   def __init__(self,line):
+    line = line[:21]+" "+line[22:] # if there is a chain id, blank it out
     atom_attributes = ((lambda x: [i.strip() for i in x.split()])(line))
     self.line = line
     self.anum = int(atom_attributes[1])
