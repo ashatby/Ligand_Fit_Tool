@@ -81,7 +81,7 @@ def get_ligand_data_pdbqt(proteinfile, ligandfile, printprocess = False):
         if (printprocess):
             #print("Processing Ligand",ligand.name)
             sys.stderr.write("Processing Ligand %s\n" % (ligand.name))
-            print("Processing Ligand",ligand.name)
+            #print("Processing Ligand",ligand.name)
     return alldata
 
 
@@ -162,7 +162,7 @@ def get_ligand_data_pdb(proteinfile, ligandcode,hetatom_chain='',pdbname = '',pr
     if printprocess:
         #print(f"Processing {proteinfile}")
         sys.stderr.write(f"Processing {proteinfile}\n")
-        print(f"Processing {proteinfile}")
+        #print(f"Processing {proteinfile}")
     ligand = ligand_from_pdb.read_pdb_ligand(proteinfile,ligandcode,hetatm_chain_name=hetatom_chain,hetatms=True)
     protein = pdb_1.read_pdb(proteinfile)
     list_of_protein_coords = list(atom.co for chain in protein for atom in chain)
